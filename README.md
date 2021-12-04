@@ -70,5 +70,5 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
 1.- npm install
-2.- npm run build ---- para instalar el ejecutable
 3.- yarn start/npm start ----- para iniciar por consola
+2.- npm run build ---- para instalar el ejecutable

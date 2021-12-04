@@ -1,32 +1,15 @@
-/* body{
-    margin: 0;
+/* @font-face {
+  font-family: monospace;
+} */
+
+body{
+  margin: 0;
     height: 100%;
     min-height: 100vh;
-    background-image: url(../src/images/Imagen1.png);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-
-  }
-  body::before{
-    content: "";
-    width:100%;
-    min-height: 100vh;
-    position: absolute;
-    top: 0;
-    left: 0;
-
-    background:linear-gradient(90deg, #212121,#263238);
-    opacity: 0.3;
-    z-index: -1;
-  } */
-body{
-  background-image: url(../src/images/Imagen1.png);
-  /* background-size: 50% 100%; */
+  background-image: url(../src/images/ciudadela.jpg);
+  background-size: cover;
   background-repeat: no-repeat;
-  background-position: 350px center;
-  /* background-position: center; */
+  background-position: center;
   background-attachment: fixed;
 }
 /* 

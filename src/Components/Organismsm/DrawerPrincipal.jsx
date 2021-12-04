@@ -40,86 +40,26 @@ const DrawerPrincipal = () => {
                     <ListItemIcon >
                         <ArrowRightAltIcon style={{color:'white'}}/>
                     </ListItemIcon>
-                    <ListItemText><span className={classes.tamano}>Principal</span></ListItemText>
+                    <ListItemText><span className={classes.tamano}>Inicio</span></ListItemText>
                 </ListItem>
-                {/* <ListItem button component={Link} to='/productsList' style={{color:'yellowgreen'}}>
+                <ListItem button component={Link} to='/estudiantes' style={{color:'yellowgreen'}}>
                     <ListItemIcon>
                         <ArrowRightAltIcon style={{color:'white'}} />
                     </ListItemIcon>
-                    <ListItemText><span className={classes.tamano}>Lista de Productos</span></ListItemText>
+                    <ListItemText><span className={classes.tamano}>Estudiantes</span></ListItemText>
                 </ListItem>
-                <ListItem button component={Link} to='/register' style={{color:'yellowgreen'}}>
+                <ListItem button component={Link} to='/carreras' style={{color:'yellowgreen'}}>
                     <ListItemIcon>
                         <ArrowRightAltIcon style={{color:'white'}} />
                     </ListItemIcon>
-                    <ListItemText><span className={classes.tamano}>Registro de Producto</span></ListItemText>
+                    <ListItemText><span className={classes.tamano}>Carreras</span></ListItemText>
                 </ListItem>
-                <ListItem button component={Link} to='/ingresomat' style={{color:'yellowgreen'}}>
+                <ListItem button component={Link} to='/tesis' style={{color:'yellowgreen'}}>
                     <ListItemIcon>
                         <ArrowRightAltIcon style={{color:'white'}} />
                     </ListItemIcon>
-                    <ListItemText><span className={classes.tamano}>Ingreso de Materiales</span></ListItemText>
+                    <ListItemText><span className={classes.tamano}>Tesis</span></ListItemText>
                 </ListItem>
-                <ListItem button component={Link} to='/salidamat' style={{color:'yellowgreen'}}>
-                    <ListItemIcon>
-                        <ArrowRightAltIcon style={{color:'white'}} />
-                    </ListItemIcon>
-                    <ListItemText><span className={classes.tamano}>Salida de Materiales</span></ListItemText>
-                </ListItem>
-                <ListItem button component={Link} to='/ingresosalmacen' style={{color:'yellowgreen'}}>
-                    <ListItemIcon>
-                        <ArrowRightAltIcon style={{color:'white'}} />
-                    </ListItemIcon>
-                    <ListItemText><span className={classes.tamano}>Almacén</span></ListItemText>
-                </ListItem>
-                <ListItem button component={Link} to='/imagenes' style={{color:'yellowgreen'}}>
-                    <ListItemIcon>
-                        <ArrowRightAltIcon style={{color:'white'}} />
-                    </ListItemIcon>
-                    <ListItemText><span className={classes.tamano}>Imaneges</span></ListItemText>
-                </ListItem> */}
-                <ListItem button component={Link} to='/listaProduct' style={{color:'yellowgreen'}}>
-                    <ListItemIcon>
-                        <ArrowRightAltIcon style={{color:'white'}} />
-                    </ListItemIcon>
-                    <ListItemText><span className={classes.tamano}>Lista de Productos</span></ListItemText>
-                </ListItem>
-                <ListItem button component={Link} to='/ingresoMateriales' style={{color:'yellowgreen'}}>
-                    <ListItemIcon>
-                        <ArrowRightAltIcon style={{color:'white'}} />
-                    </ListItemIcon>
-                    <ListItemText><span className={classes.tamano}>Ingreso de Materiales</span></ListItemText>
-                </ListItem>
-                <ListItem button component={Link} to='/salidaMateriales' style={{color:'yellowgreen'}}>
-                    <ListItemIcon>
-                        <ArrowRightAltIcon style={{color:'white'}} />
-                    </ListItemIcon>
-                    <ListItemText><span className={classes.tamano}>Salida de Materiales</span></ListItemText>
-                </ListItem>
-                <ListItem button component={Link} to='/listaAlmacen' style={{color:'yellowgreen'}}>
-                    <ListItemIcon>
-                        <ArrowRightAltIcon style={{color:'white'}} />
-                    </ListItemIcon>
-                    <ListItemText><span className={classes.tamano}>Almacén</span></ListItemText>
-                </ListItem>
-                <ListItem button component={Link} to='/hojaCostos' style={{color:'yellowgreen'}}>
-                    <ListItemIcon>
-                        <ArrowRightAltIcon style={{color:'white'}} />
-                    </ListItemIcon>
-                    <ListItemText><span className={classes.tamano}>Hoja de Costos</span></ListItemText>
-                </ListItem>
-                {/* <ListItem button component={Link} to='/targetaexis' style={{color:'yellowgreen'}}>
-                    <ListItemIcon>
-                        <ArrowRightAltIcon style={{color:'white'}} />
-                    </ListItemIcon>
-                    <ListItemText><span className={classes.tamano}>Targeta de Existencia</span></ListItemText>
-                </ListItem>
-                <ListItem button component={Link} to='/kardexval' style={{color:'yellowgreen'}}>
-                    <ListItemIcon>
-                        <ArrowRightAltIcon style={{color:'white'}} />
-                    </ListItemIcon>
-                    <ListItemText><span className={classes.tamano}>Kardex Valorado</span></ListItemText>
-                </ListItem> */}
             </List>
         </Drawer>
         </>
