@@ -197,7 +197,15 @@ const ListaEstudiantes = () => {
             console.log(error)
         }
     }
-    //--------------------------------------------------------
+    //----------------------GET CARRERA------------------------------
+    // const getCarrera=async()=>{
+    //     try {
+    //         const result=await ipcRenderer.invoke('get-carrera')
+    //         setCarrera()
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
     //----------------------HANDLE CHANGE----------------------------
     const handleChange = (e) => {
         if (e.target.files && e.target.files.length > 0) {
@@ -258,6 +266,8 @@ const ListaEstudiantes = () => {
         desde: '',
         hasta: '',
         sexo: '',
+        nameSede: '',
+        nameCarrera: '',
     })
     const getbuscardor = async (e) => {
         e.preventDefault()
@@ -265,7 +275,16 @@ const ListaEstudiantes = () => {
         document.getElementById("buscador").style.display = 'block'
         // console.log(changeBuscador)
         try {
-            const result = await ipcRenderer.invoke('buscar-edad', changeBuscador)
+            const data={
+                desde:changeBuscador.desde,
+                hasta:changeBuscador.hasta,
+                sexo:changeBuscador.sexo,
+                nameSede:changeBuscador.nameSede.nameSede,
+                nameCarrera:changeBuscador.nameCarrera.nameCarrera,
+
+            }
+            // const result = await ipcRenderer.invoke('buscar-edad', changeBuscador)
+            const result = await ipcRenderer.invoke('buscar-edad', data)
             setEncontrado(JSON.parse(result))
         } catch (error) {
             console.log(error)
@@ -273,6 +292,9 @@ const ListaEstudiantes = () => {
 
     }
     const handleBuscador = (e) => {
+        if (e.target.name === 'nameSede') {
+            getCarrera(e.target.value.nameSede)
+        }
         setChangeBuscador({
             ...changeBuscador,
             [e.target.name]: e.target.value
@@ -323,35 +345,41 @@ const ListaEstudiantes = () => {
     return (
         <>
             <Main>
-                <Typography variant='h5' align='center' style={{marginBottom:'3rem'}}>ESTUDIANTES</Typography>
+                <Typography variant='h5' align='center' style={{ marginBottom: '3rem' }}>ESTUDIANTES</Typography>
                 <Grid container spacing={2} className={classes.spacingBot}>
                     <Grid item xs={12} sm={3}>
                         <Paper component={Box} p={2}>
-                            <Typography className={classes.spacingBot} variant='subtitle2'>Estudiantes Masculinos : {contEstudiante.contHombre}</Typography>
-                            <Typography className={classes.spacingBot} variant='subtitle2'>Estudiantes Femeninos : {contEstudiante.contMujeres}</Typography>
+                            <Typography variant='subtitle2'>Estudiantes Masculinos : {contEstudiante.contHombre}</Typography>
+                            <Typography variant='subtitle2'>Estudiantes Femeninos : {contEstudiante.contMujeres}</Typography>
                             <Typography className={classes.spacingBot} variant='subtitle2'>Total Estudiantes : {contEstudiante.constEstudiantes}</Typography>
                             <Typography align='center' variant='subtitle2' className={classes.spacingBot}>INTRODUSCA EDADES</Typography>
                             <form onSubmit={getbuscardor} className={classes.spacingBot}>
-                                <TextField
-                                    name='desde'
-                                    label='Edad Desde'
-                                    variant='outlined'
-                                    size='small'
-                                    type='number'
-                                    className={classes.spacingBot}
-                                    fullWidth
-                                    onChange={handleBuscador}
-                                />
-                                <TextField
-                                    name='hasta'
-                                    label='Edad Hasta'
-                                    variant='outlined'
-                                    size='small'
-                                    type='number'
-                                    className={classes.spacingBot}
-                                    fullWidth
-                                    onChange={handleBuscador}
-                                />
+                                <Grid container spacing={1}>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            name='desde'
+                                            label='Edad Desde'
+                                            variant='outlined'
+                                            size='small'
+                                            type='number'
+                                            className={classes.spacingBot}
+                                            // fullWidth
+                                            onChange={handleBuscador}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            name='hasta'
+                                            label='Edad Hasta'
+                                            variant='outlined'
+                                            size='small'
+                                            type='number'
+                                            className={classes.spacingBot}
+                                            // fullWidth
+                                            onChange={handleBuscador}
+                                        />
+                                    </Grid>
+                                </Grid>
                                 <TextField
                                     name='sexo'
                                     label='Sexo'
@@ -366,6 +394,40 @@ const ListaEstudiantes = () => {
                                     <MenuItem value='Masculino'>Masculino</MenuItem>
                                     <MenuItem value='Femenino'>Femenino</MenuItem>
                                     <MenuItem value='Otros'>Otros</MenuItem>
+                                </TextField>
+                                <TextField
+                                    name='nameSede'
+                                    label='Sede'
+                                    variant='outlined'
+                                    size='small'
+                                    align='center'
+                                    select
+                                    className={classes.spacingBot}
+                                    fullWidth
+                                    value={changeBuscador.nameSede}
+                                    onChange={handleBuscador}
+                                    required
+                                >
+                                    {sede && sede.map((s, index) => (
+                                        <MenuItem key={index} value={s}>{s.nameSede}</MenuItem>
+                                    ))}
+                                </TextField>
+                                <TextField
+                                    name='nameCarrera'
+                                    label='Carrera'
+                                    variant='outlined'
+                                    size='small'
+                                    align='center'
+                                    select
+                                    className={classes.spacingBot}
+                                    fullWidth
+                                    value={changeBuscador.nameCarrera}
+                                    onChange={handleBuscador}
+                                    required
+                                >
+                                    {carrera.map((c, index) => (
+                                        <MenuItem key={index} value={c}>{c.nameCarrera}</MenuItem>
+                                    ))}
                                 </TextField>
                                 <Button size='small' variant='outlined' style={{ background: 'green', color: 'white' }} endIcon={<SearchIcon />} type='submit' fullWidth>Buscar</Button>
                             </form>
@@ -585,7 +647,6 @@ const ListaEstudiantes = () => {
                                     required
                                 >
                                     {carrera.map((c, index) => (
-                                        // <MenuItem key={index} value={c.nameCarrera}>{c.nameCarrera}</MenuItem>
                                         <MenuItem key={index} value={c}>{c.nameCarrera}</MenuItem>
                                     ))}
                                 </TextField>

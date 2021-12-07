@@ -67,13 +67,14 @@ const PROYECTOSSCHEMA = {
   nameCarrera: String,
   nameSede: String,
   fonoEst: String,
-  ciEst: { type: String, require: true, trim: true, unique: true },
+  ciEst:String,
   nameProyecto: String,
   calificacion: String,
   requisito1: String,
   requisito2: String,
   requisito3: String,
   registerDate: String,
+  fechaDefensa:String,
 }
 const PROYECTO = mongoose.model('proyectos', PROYECTOSSCHEMA)
 
@@ -325,11 +326,12 @@ ipcMain.handle("post-proyecto", async (e, args) => {
     const estudiante = await ESTUDIANTE.find({ ciEst: result.ciEst })
     const data2 = {
       ciEst: result.ciEst,
-      nameProyecto: data.nameProyecto,
+      nameProyecto: data.nameProyecto.toUpperCase(),
       calificacion: data.calificacion,
       requisito1: data.requisito1,
       requisito2: data.requisito2,
       requisito3: data.requisito3,
+      fechaDefensa: data.fechaDefensa,
       firstNameEst: estudiante[0].firstNameEst,
       lastNameEstP: estudiante[0].lastNameEstP,
       lastNameEstM: estudiante[0].lastNameEstM,
@@ -362,8 +364,10 @@ ipcMain.handle("get-proyecto", async (e, args) => {
 //----------------EDIT DE PROYECTOS-----------------------------------------
 ipcMain.handle("edit-proyecto", async (e, args) => {
   const result = args
+  const cambio=result.nameProyecto.toUpperCase()
+  var data={...result,nameProyecto:cambio}
   try {
-    const proyecto = await PROYECTO.findByIdAndUpdate({ _id: result._id }, result)
+    const proyecto = await PROYECTO.findByIdAndUpdate({ _id: result._id }, data)
     return JSON.stringify({ message: 'proyecto actualizado' })
   } catch (error) {
     console.log(error)
@@ -409,7 +413,7 @@ ipcMain.handle("buscar-edad", async (e, args) => {
   console.log(result)
   const array=[]
   try {
-    const estudiante=await ESTUDIANTE.find({sexoEst:result.sexo})
+    const estudiante=await ESTUDIANTE.find({sexoEst:result.sexo,nameSede:result.nameSede,nameCarrera:result.nameCarrera})
     if(estudiante.length>0){
       const contEst=estudiante.length
       for(var i=0;i<contEst;i++){

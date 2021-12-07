@@ -1,4 +1,4 @@
-import { Box, Button, Container, Dialog, Grid, IconButton, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip, Typography } from '@material-ui/core'
+import { Box, Button, Container, Dialog, Grid, IconButton, InputAdornment, MenuItem, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 import React, { useEffect, useState } from 'react'
 import { Main } from '../Organismsm/NewDrawer'
@@ -7,18 +7,23 @@ import EditIcon from '@material-ui/icons/Edit'
 import DeleteIcon from '@material-ui/icons/Delete'
 import CheckCircleIcon from '@material-ui/icons/CheckCircle'
 import CancelIcon from '@material-ui/icons/Cancel'
+import SearchIcon from '@material-ui/icons/Search';
 // import { ipcRenderer } from 'electron/renderer'
 const ipcRenderer = window.require('electron').ipcRenderer
 
 const useStyles = makeStyles((theme) => ({
     spacingBot: {
         marginBottom: '1rem'
+    },
+    styleBody: {
+        padding: 5
     }
 }))
 
 const ListaTesis = () => {
     const classes = useStyles()
     const [proyecto, setProyecto] = useState([])
+    const [buscador, setBuscador] = useState("")
     const [openAddProyecto, setOpenAddProyecto] = useState(false)
     const [openEditProyecto, setOpenEditProyecto] = useState(false)
     const [openDeleteProyecto, setOpenDeleteProyecto] = useState(false)
@@ -36,6 +41,7 @@ const ListaTesis = () => {
         requisito1: '',
         requisito2: '',
         requisito3: '',
+        fechaDefensa: ''
     })
 
     useEffect(() => {
@@ -111,6 +117,7 @@ const ListaTesis = () => {
             console.log(error)
         }
     }
+    //-----------------------
     //----------------HANDLE CHANGE-------
     const handleChange = (e) => {
         setChangeData({
@@ -131,6 +138,19 @@ const ListaTesis = () => {
         }
 
     }
+    //------------BUSCARDOR-----------
+    const buscarProyecto = (buscador) => {
+        return function (x) {
+            return x.nameCarrera.includes(buscador) ||
+                x.nameCarrera.toLowerCase().includes(buscador) ||
+                x.ciEst.includes(buscador) ||
+                x.calificacion.includes(buscador) ||
+                x.calificacion.toLowerCase().includes(buscador) ||
+                !buscador
+
+        }
+    }
+
     //-----------------------
     // console.log(proyecto)
     return (
@@ -145,33 +165,56 @@ const ListaTesis = () => {
                     endIcon={<BookTesisIcon />}
                     onClick={openModalAddProyecto}
                 >registrar</Button>
+                <div align='right' className={classes.spacingBot}>
+                    {proyecto && (
+                        <TextField
+                            // className={classes.searchSize}
+                            style={{ background: 'white', borderRadius: 5, width: '40%' }}
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position='start'>
+                                        <SearchIcon />
+                                    </InputAdornment>
+                                )
+                            }}
+                            onChange={e => setBuscador(e.target.value)}
+                        />
+                    )}
+                </div>
                 <Paper component={Box} p={1}>
                     <TableContainer style={{ maxHeight: 540 }}>
                         <Table stickyHeader>
                             <TableHead>
                                 <TableRow>
                                     <TableCell>Nombre Estudiante</TableCell>
+                                    <TableCell>CI</TableCell>
                                     <TableCell>Carrera</TableCell>
                                     <TableCell>Titilo de Proyecto</TableCell>
                                     <TableCell>Calificacion</TableCell>
                                     <TableCell>Requisitos</TableCell>
+                                    <TableCell>Fecha Defensa</TableCell>
                                     <TableCell></TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 {proyecto.length > 0 ? (
-                                    proyecto.map((p, index) => (
+                                    proyecto.filter(buscarProyecto(buscador)).map((p, index) => (
                                         <TableRow key={index}>
-                                            <TableCell>{p.firstNameEst} {p.lastNameEstP} {p.lastNameEstM}</TableCell>
-                                            <TableCell>{p.nameCarrera}</TableCell>
-                                            <TableCell>{p.nameProyecto}</TableCell>
-                                            <TableCell>{p.calificacion}</TableCell>
-                                            <TableCell>
-                                                {p.requisito1 === 'si' ? <CheckCircleIcon style={{ color: 'green' }} /> : <CancelIcon style={{ color: 'red' }}/>}
-                                                {p.requisito2 === 'si' ? <CheckCircleIcon style={{ color: 'green' }} /> : <CancelIcon style={{ color: 'red' }}/>}
-                                                {p.requisito3 === 'si' ? <CheckCircleIcon style={{ color: 'green' }} /> : <CancelIcon style={{ color: 'red' }}/>}
+                                            <TableCell className={classes.styleBody}>{p.firstNameEst} {p.lastNameEstP} {p.lastNameEstM}</TableCell>
+                                            <TableCell className={classes.styleBody}>{p.ciEst}</TableCell>
+                                            <TableCell className={classes.styleBody}>{p.nameCarrera}</TableCell>
+                                            <TableCell className={classes.styleBody}>{p.nameProyecto}</TableCell>
+                                            <TableCell className={classes.styleBody}>{p.calificacion === 'Aprobado'
+                                                ? <div style={{ color: 'green' }}>{p.calificacion}</div>
+                                                : <div style={{ color: 'red' }}>{p.calificacion}</div>
+                                            }</TableCell>
+                                            <TableCell className={classes.styleBody}>
+                                                {p.requisito1 === 'si' ? <CheckCircleIcon style={{ color: 'green' }} /> : <CancelIcon style={{ color: 'red' }} />}
+                                                {p.requisito2 === 'si' ? <CheckCircleIcon style={{ color: 'green' }} /> : <CancelIcon style={{ color: 'red' }} />}
+                                                {p.requisito3 === 'si' ? <CheckCircleIcon style={{ color: 'green' }} /> : <CancelIcon style={{ color: 'red' }} />}
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell>{p.fechaDefensa}</TableCell>
+                                            <TableCell className={classes.styleBody}>
                                                 <Grid container justifyContent='space-evenly'>
                                                     <Tooltip title='edit'>
                                                         <IconButton size='small' onClick={() => openModalEditProyecto(p)}>
@@ -257,15 +300,20 @@ const ListaTesis = () => {
                                     label='Calificacion del Proyecto'
                                     variant='outlined'
                                     size='small'
-                                    type='number'
                                     className={classes.spacingBot}
                                     fullWidth
+                                    value={changeData.calificacion}
                                     onChange={handleChange}
                                     required
-                                />
+                                    align='center'
+                                    select
+                                >
+                                    <MenuItem value='Aprobado'>Aprobado</MenuItem>
+                                    <MenuItem value='Reprovado'>Reprovado</MenuItem>
+                                </TextField>
                                 <TextField
                                     name='requisito1'
-                                    label='Requisito N° 1'
+                                    label='Certificación de Notas'
                                     variant='outlined'
                                     size='small'
                                     select
@@ -281,7 +329,7 @@ const ListaTesis = () => {
                                 </TextField>
                                 <TextField
                                     name='requisito2'
-                                    label='Requisito N° 2'
+                                    label='Legalización mas Fotocopias'
                                     variant='outlined'
                                     size='small'
                                     select
@@ -297,7 +345,7 @@ const ListaTesis = () => {
                                 </TextField>
                                 <TextField
                                     name='requisito3'
-                                    label='Requisito N° 3'
+                                    label='Informes Tribunal'
                                     variant='outlined'
                                     size='small'
                                     select
@@ -311,6 +359,18 @@ const ListaTesis = () => {
                                     <MenuItem value='si'>si</MenuItem>
                                     <MenuItem value='no'>no</MenuItem>
                                 </TextField>
+                                <TextField
+                                    name='fechaDefensa'
+                                    label='Fecha de Defensa'
+                                    variant='outlined'
+                                    size='small'
+                                    type='date'
+                                    InputLabelProps={{ shrink: true }}
+                                    className={classes.spacingBot}
+                                    fullWidth
+                                    onChange={handleChange}
+                                    required
+                                />
                                 <Grid container justifyContent='space-evenly'>
                                     <Button size='small' variant='contained' color='primary' type='submit'>registrar</Button>
                                     <Button size='small' variant='contained' color='secondary' onClick={closeModalAddProyecto}>cancelar</Button>
@@ -392,16 +452,20 @@ const ListaTesis = () => {
                                     label='Calificacion del Proyecto'
                                     variant='outlined'
                                     size='small'
-                                    type='number'
                                     className={classes.spacingBot}
-                                    defaultValue={changeData.calificacion}
                                     fullWidth
+                                    value={changeData.calificacion}
                                     onChange={handleChange}
                                     required
-                                />
+                                    align='center'
+                                    select
+                                >
+                                    <MenuItem value='Aprobado'>Aprobado</MenuItem>
+                                    <MenuItem value='Reprovado'>Reprovado</MenuItem>
+                                </TextField>
                                 <TextField
                                     name='requisito1'
-                                    label='Requisito N° 1'
+                                    label='Certificación de Notas'
                                     variant='outlined'
                                     size='small'
                                     select
@@ -417,7 +481,7 @@ const ListaTesis = () => {
                                 </TextField>
                                 <TextField
                                     name='requisito2'
-                                    label='Requisito N° 2'
+                                    label='Legalizaciones mas Fotocopias'
                                     variant='outlined'
                                     size='small'
                                     select
@@ -433,7 +497,7 @@ const ListaTesis = () => {
                                 </TextField>
                                 <TextField
                                     name='requisito3'
-                                    label='Requisito N° 3'
+                                    label='Informes Tribunal'
                                     variant='outlined'
                                     size='small'
                                     select
@@ -447,6 +511,19 @@ const ListaTesis = () => {
                                     <MenuItem value='si'>si</MenuItem>
                                     <MenuItem value='no'>no</MenuItem>
                                 </TextField>
+                                <TextField
+                                    name='fechaDefensa'
+                                    label='Fecha de Defensa'
+                                    variant='outlined'
+                                    size='small'
+                                    type='date'
+                                    InputLabelProps={{ shrink: true }}
+                                    className={classes.spacingBot}
+                                    defaultValue={changeData.fechaDefensa}
+                                    fullWidth
+                                    onChange={handleChange}
+                                    required
+                                />
                             </Grid>
                             <Grid container justifyContent='space-evenly'>
                                 <Button size='small' variant='contained' color='primary' type='submit'>editar</Button>
