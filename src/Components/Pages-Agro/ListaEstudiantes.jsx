@@ -406,7 +406,7 @@ const ListaEstudiantes = () => {
                                     fullWidth
                                     value={changeBuscador.nameSede}
                                     onChange={handleBuscador}
-                                    required
+                                    // required
                                 >
                                     {sede && sede.map((s, index) => (
                                         <MenuItem key={index} value={s}>{s.nameSede}</MenuItem>
@@ -423,7 +423,7 @@ const ListaEstudiantes = () => {
                                     fullWidth
                                     value={changeBuscador.nameCarrera}
                                     onChange={handleBuscador}
-                                    required
+                                    // required
                                 >
                                     {carrera.map((c, index) => (
                                         <MenuItem key={index} value={c}>{c.nameCarrera}</MenuItem>

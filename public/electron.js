@@ -67,14 +67,14 @@ const PROYECTOSSCHEMA = {
   nameCarrera: String,
   nameSede: String,
   fonoEst: String,
-  ciEst:String,
+  ciEst: String,
   nameProyecto: String,
   calificacion: String,
   requisito1: String,
   requisito2: String,
   requisito3: String,
   registerDate: String,
-  fechaDefensa:String,
+  fechaDefensa: String,
 }
 const PROYECTO = mongoose.model('proyectos', PROYECTOSSCHEMA)
 
@@ -100,7 +100,7 @@ function createWindow() {
   win = new BrowserWindow({
     // width: 1400,
     // height: 900,
-    show:false,
+    show: false,
     webPreferences: {
       nodeIntegration: true,
       enableRemoteModule: true,
@@ -364,8 +364,8 @@ ipcMain.handle("get-proyecto", async (e, args) => {
 //----------------EDIT DE PROYECTOS-----------------------------------------
 ipcMain.handle("edit-proyecto", async (e, args) => {
   const result = args
-  const cambio=result.nameProyecto.toUpperCase()
-  var data={...result,nameProyecto:cambio}
+  const cambio = result.nameProyecto.toUpperCase()
+  var data = { ...result, nameProyecto: cambio }
   try {
     const proyecto = await PROYECTO.findByIdAndUpdate({ _id: result._id }, data)
     return JSON.stringify({ message: 'proyecto actualizado' })
@@ -409,22 +409,68 @@ ipcMain.handle("get-cont-estudiantes", async (e, args) => {
 
 //------------------------BUSCADOR DE EDAD---------------------------------
 ipcMain.handle("buscar-edad", async (e, args) => {
-  const result=args
+  const result = args
   console.log(result)
-  const array=[]
+  const array = []
   try {
-    const estudiante=await ESTUDIANTE.find({sexoEst:result.sexo,nameSede:result.nameSede,nameCarrera:result.nameCarrera})
-    if(estudiante.length>0){
-      const contEst=estudiante.length
-      for(var i=0;i<contEst;i++){
-        var fecha = moment().diff(`${estudiante[i].fechaNacimientoEst}`, 'years', false)
-        if(fecha>=result.desde &&fecha<=result.hasta){
-          array.push(estudiante[i])
+    //solo edad
+    if (result.desde != '' && result.hasta != '' && result.sexo == ''&&result.nameSede==undefined&&result.nameCarrera==undefined) {
+      const estudiante = await ESTUDIANTE.find({})
+      if (estudiante.length > 0) {
+        const contEst = estudiante.length
+        for (var i = 0; i < contEst; i++) {
+          var fecha = moment().diff(`${estudiante[i].fechaNacimientoEst}`, 'years', false)
+          if (fecha >= result.desde && fecha <= result.hasta) {
+            array.push(estudiante[i])
+          }
         }
       }
+      return JSON.stringify(array)
+    }
+    //solo sexo
+    else if(result.sexo!=''&&result.desde =='' && result.hasta==''&&result.nameSede==undefined&&result.nameCarrera==undefined){
+      const estudiante = await ESTUDIANTE.find({sexoEst: result.sexo })
+      return JSON.stringify(estudiante)
+    }
+    //solo carrera
+    else if(result.nameSede!=''&&result.nameCarrera!=''&&result.sexo==''&&result.desde =='' && result.hasta==''){
+      const estudiante = await ESTUDIANTE.find({ nameSede: result.nameSede, nameCarrera: result.nameCarrera })
+      return JSON.stringify(estudiante)
+    }
+    //edad y sexo 
+    else if (result.desde != '' && result.hasta != ''&&result.sexo!=''&&result.nameSede==undefined&&result.nameCarrera==undefined) {
+      const estudiante = await ESTUDIANTE.find({sexoEst: result.sexo})
+      if (estudiante.length > 0) {
+        const contEst = estudiante.length
+        for (var i = 0; i < contEst; i++) {
+          var fecha = moment().diff(`${estudiante[i].fechaNacimientoEst}`, 'years', false)
+          if (fecha >= result.desde && fecha <= result.hasta) {
+            array.push(estudiante[i])
+          }
+        }
+      }
+      return JSON.stringify(array)
+    }
+    //edad mas carrera
+    else if(result.nameSede!=''&&result.nameCarrera!=''&&result.sexo!=''&&result.desde =='' && result.hasta==''){
+      const estudiante = await ESTUDIANTE.find({sexoEst: result.sexo, nameSede: result.nameSede, nameCarrera: result.nameCarrera })
+      return JSON.stringify(estudiante)
+    }
+    //todo
+    else if(result.desde != '' && result.hasta != ''&&result.nameSede!=''&&result.nameCarrera!=''&&result.sexo!=''){
+      const estudiante = await ESTUDIANTE.find({ sexoEst: result.sexo, nameSede: result.nameSede, nameCarrera: result.nameCarrera })
+      if (estudiante.length > 0) {
+        const contEst = estudiante.length
+        for (var i = 0; i < contEst; i++) {
+          var fecha = moment().diff(`${estudiante[i].fechaNacimientoEst}`, 'years', false)
+          if (fecha >= result.desde && fecha <= result.hasta) {
+            array.push(estudiante[i])
+          }
+        }
+      }
+      return JSON.stringify(array)
     }
     // console.log(array)
-    return JSON.stringify(array)
   } catch (error) {
     console.log(error)
   }
