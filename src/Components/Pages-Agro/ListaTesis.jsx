@@ -309,7 +309,7 @@ const ListaTesis = () => {
                                     select
                                 >
                                     <MenuItem value='Aprobado'>Aprobado</MenuItem>
-                                    <MenuItem value='Reprovado'>Reprovado</MenuItem>
+                                    <MenuItem value='Reprobado'>Reprobado</MenuItem>
                                 </TextField>
                                 <TextField
                                     name='requisito1'
@@ -461,7 +461,7 @@ const ListaTesis = () => {
                                     select
                                 >
                                     <MenuItem value='Aprobado'>Aprobado</MenuItem>
-                                    <MenuItem value='Reprovado'>Reprovado</MenuItem>
+                                    <MenuItem value='Reprobado'>Reprobado</MenuItem>
                                 </TextField>
                                 <TextField
                                     name='requisito1'

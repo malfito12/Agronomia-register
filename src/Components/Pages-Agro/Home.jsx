@@ -8,7 +8,7 @@ const Home = () => {
         //     Home
         // </Container>
         <Main>
-            <Typography variant='h1' align='center' style={{paddingTop:'10rem', color:'white'}}>CARRERA DE AGRONOMIA</Typography>
+            <Typography variant='h2' align='center' style={{paddingTop:'10rem', color:'white'}}>FACULTAD DE CIENCIAS AGRICOLAS Y PECUARIAS</Typography>
         </Main>
         // <div></div>
     )
